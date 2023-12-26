@@ -12,6 +12,7 @@ class ThreadManager:
 
     def stop_all_threads(self):
         for thread in self.threads:
+            print("Meow")
             thread.join()
 
 
@@ -35,6 +36,7 @@ def ping():
         new_target = get_target()
         if new_target != current_target:
             stop()
+            print(new_target)
             # Start the work function in a separate thread
             thread = threading.Thread(target=work, args=(new_target,))
             thread_manager.add_thread(thread)
@@ -43,6 +45,7 @@ def ping():
         new_target = get_target()
         if new_target != current_target:
             stop()
+            print(new_target)
             # Start the work function in a separate thread
             thread = threading.Thread(target=work, args=(new_target,))
             thread_manager.add_thread(thread)
