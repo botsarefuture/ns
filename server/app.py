@@ -1,10 +1,9 @@
 import flask
-from flask import request, jsonify, Flask
+from flask import request, jsonify, Flask, render_template
 import db
 import pymongo
-from datetime import datetime
+from datetime import datetime, timedelta
 import functions
-
 import config
 
 config = config.get_config()
@@ -59,20 +58,23 @@ def add_job():
 
     return jsonify({"status": "ok"})
 
+
 @app.route("/get_clients_count/")
 def get_clients_count():
-    # Calculate the count of clients who have pinged in the last 30 minutes
     thirty_minutes_ago = datetime.now() - timedelta(minutes=30)
     count = db.pings_collection.count_documents({"time": {"$gte": thirty_minutes_ago}})
     return jsonify({"clients_count": count})
 
 @app.route("/get_jobs_list/")
 def get_jobs_list():
-    # Retrieve the list of jobs
     jobs = list(db.jobs_collection.find())
     for job in jobs:
         job["_id"] = str(job["_id"])
     return jsonify({"jobs": jobs})
 
+# Route for serving the HTML dashboard
+@app.route("/")
+def dashboard():
+    return render_template("index.html")
 if __name__ == "__main__":
     app.run(config.get("host"), config.get("port"))
