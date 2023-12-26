@@ -40,7 +40,7 @@ class AttackController:
 
 # Rest of the code remains unchanged
 
-base_urls = ["http://128.140.126.18:5000", "http://your_second_url"]  # Replace with your actual base URLs
+base_urls = ["http://128.140.126.18:5000"]  # Replace with your actual base URLs
 current_target = None  # Variable to store the current target
 thread_manager = ThreadManager()  # Thread manager to keep track of threads
 
