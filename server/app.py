@@ -28,19 +28,22 @@ def ping():
 
 @app.route("/get_job/")
 def get_job():
-    job = db.jobs_collection.find_one({"done": False}, sort=[("priority", pymongo.ASCENDING)])
+    job = list(db.jobs_collection.find({"done": False}, sort=[("priority", pymongo.ASCENDING)]))
 
-    if not job == None:
-        job["_id"] = str(job["_id"])
+    jobs = []
 
-        job["status"] = "ok"
+    for jobbet in job:
 
-        job["url"] = [job["url"], job["url"]]
+        if not jobbet == None:
 
-        return jsonify(job)
 
-    if job == None:
+            jobs.append([jobbet["url"]])
+
+
+    if len(jobs) == 0:
         return jsonify({"status": "no_jobs"})
+
+    return jsonify({"status": "ok", "url": jobs})
     
 @app.route("/add_job/", methods=["POST"])
 def add_job():
