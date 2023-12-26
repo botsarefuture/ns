@@ -30,6 +30,7 @@ def get_target():
     return target
 
 def work(target):
+    print(target)
     # Perform the specified job based on job_type
     if target["job_type"] == "DDoS":
         runner.run(target["url"])
