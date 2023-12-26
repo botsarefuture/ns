@@ -61,14 +61,32 @@ def add_job():
 
 @app.route("/get_clients_count/")
 def get_clients_count():
-    thirty_minutes_ago = datetime.now() - timedelta(minutes=30)
-    count = db.pings_collection.count_documents({"time": {"$gte": thirty_minutes_ago}})
-    
-    # Fetch counts over time for the line chart
+  
+    from datetime import datetime, timedelta
+    import pytz
+
+    # Define the timezone
+    timezone_utc_minus_3 = pytz.timezone("UTC")
+
+    # Get the current time in UTC
+    current_time_utc = datetime.now(pytz.utc)
+
+    # Calculate thirty minutes ago in UTC-3
+    thirty_minutes_ago_utc_minus_3 = current_time_utc - timedelta(minutes=30)
+
+    count = db.pings_collection.count_documents({"time": {"$gte": thirty_minutes_ago_utc_minus_3}})
+
+
+    # Convert the datetime to the specified timezone
+    thirty_minutes_ago = thirty_minutes_ago_utc_minus_3.astimezone(timezone_utc_minus_3)
+
+    # Now you can use the 'thirty_minutes_ago' variable in your MongoDB aggregation
     counts_over_time = list(db.pings_collection.aggregate([
-        {"$match": {"time": {"$gte": thirty_minutes_ago}}},
-        {"$group": {"_id": {"$dateToString": {"format": "%Y-%m-%d %H:%M", "date": "$time"}}, "count": {"$sum": 1}}}
+        {"$match": {"time": {"$gte": thirty_minutes_ago_utc_minus_3}}},
+        {"$group": {"_id": {"$dateToString": {"format": "%Y-%m-%d %H:%M", "date": "$time"}}, "count": {"$sum": 1}}},
+        {"$sort": {"_id": 1}}  # Sort by "_id" in ascending order
     ]))
+
 
     return jsonify({"clients_count": count, "clients_counts_over_time": counts_over_time})
 

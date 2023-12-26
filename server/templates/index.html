@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,10 +23,6 @@
             cursor: pointer;
         }
 
-        canvas {
-            margin-top: 20px;
-        }
-
         ul {
             list-style-type: none;
             padding: 0;
@@ -32,6 +30,10 @@
 
         li {
             margin-bottom: 5px;
+        }
+
+        .recent-section {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -54,10 +56,15 @@
 <button onclick="getClientsCount()">Get Clients Count</button>
 <p id="clientsCount"></p>
 
-<canvas id="clientsChart" width="400" height="200"></canvas>
+<div class="recent-section">
+    <h2>Recent Jobs</h2>
+    <ul id="recentJobs"></ul>
+</div>
 
-<button onclick="getJobsList()">Get Jobs List</button>
-<ul id="jobsList"></ul>
+<div class="recent-section">
+    <h2>Recent Pingers</h2>
+    <ul id="recentPingers"></ul>
+</div>
 
 <script>
     function getVersion() {
@@ -86,6 +93,7 @@
                 document.getElementById("jobStatus").innerText = "Job Status: " + data.status;
                 if (data.status === "ok") {
                     alert("Job received: " + JSON.stringify(data));
+                    updateRecentJobs(data); // Update the recent jobs list
                 }
             });
     }
@@ -112,41 +120,19 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById("clientsCount").innerText = "Clients Count: " + data.clients_count;
-                updateClientsChart(data.clients_counts_over_time);
             });
     }
 
-    function updateClientsChart(clientsCounts) {
-        var ctx = document.getElementById('clientsChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: clientsCounts.map(entry => entry._id),
-                datasets: [{
-                    label: 'Clients Count',
-                    data: clientsCounts.map(entry => entry.count),
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    x: [{
-                        type: 'time',
-                        time: {
-                            unit: 'minute',
-                            displayFormats: {
-                                minute: 'HH:mm'
-                            }
-                        }
-                    }],
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+    function updateRecentJobs(job) {
+        const recentJobsList = document.getElementById("recentJobs");
+        const listItem = document.createElement("li");
+        listItem.textContent = `Job: ${JSON.stringify(job)}`;
+        recentJobsList.appendChild(listItem);
+
+        // Limit the number of items to, for example, the last 5
+        if (recentJobsList.children.length > 5) {
+            recentJobsList.removeChild(recentJobsList.firstChild);
+        }
     }
 
     function getJobsList() {
@@ -162,6 +148,7 @@
                 });
             });
     }
+
     setInterval(getClientsCount, 5000); // Update every 5 seconds (adjust as needed)
 
 </script>
