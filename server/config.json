@@ -1,0 +1,8 @@
+{
+    "instance_name": "OilDown",
+    "MongoDB": {
+        "url": "mongodb://SMHV:SMHVisBEST2023!IsITreally%3F@10.0.0.4:27017/?directConnection=true&authMechanism=DEFAULT"
+    },
+    "host": "0.0.0.0",
+    "port": "5000"
+}
