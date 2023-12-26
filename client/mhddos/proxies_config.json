@@ -1,13 +1,34 @@
 {
-  "proxy-providers": [
-    {"type": 4, "url": "https://api.proxyscrape.com/v2/?request=getproxies&protocol=socks4", "timeout": 5},
-    {"type": 5, "url": "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks5", "timeout": 5},
-    {"type": 1, "url": "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http", "timeout": 5},
-    {"type": 4, "url": "https://openproxy.space/list/socks4", "timeout": 5},
-    {"type": 5, "url": "https://openproxy.space/list/socks5", "timeout": 5},
-    {"type": 1, "url": "https://openproxy.space/list/http", "timeout": 5},
-    {"type": 4, "url": "https://raw.githubusercontent.com/jetkai/proxy-list/main/online-proxies/txt/proxies-socks4.txt", "timeout": 5},
-    {"type": 5, "url": "https://raw.githubusercontent.com/jetkai/proxy-list/main/online-proxies/txt/proxies-socks5.txt", "timeout": 5},
-    {"type": 1, "url": "https://raw.githubusercontent.com/jetkai/proxy-list/main/online-proxies/txt/proxies-http%2Bhttps.txt", "timeout": 5}
-  ]
+    "proxy-providers": [
+        {
+            "type": 4,
+            "url": "https://raw.githubusercontent.com/jetkai/proxy-list/main/online-proxies/txt/proxies-socks4.txt",
+            "timeout": 5
+        },
+        {
+            "type": 4,
+            "url": "https://www.proxy-list.download/api/v1/get?type=socks4",
+            "timeout": 5
+        },
+        {
+            "type": 5,
+            "url": "https://raw.githubusercontent.com/hookzof/socks5_list/master/proxy.txt",
+            "timeout": 5
+        },
+        {
+            "type": 5,
+            "url": "https://spys.me/socks.txt",
+            "timeout": 5
+        },
+        {
+            "type": 1,
+            "url": "https://raw.githubusercontent.com/almroot/proxylist/master/list.txt",
+            "timeout": 5
+        },
+        {
+            "type": 1,
+            "url": "https://www.proxy-list.download/api/v1/get?type=http",
+            "timeout": 5
+        }
+    ]
 }
