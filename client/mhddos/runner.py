@@ -20,7 +20,7 @@ def update_proxies(period, proxy_timeout, threads, targets):
         if (time.time() - last_update) < period / 2:
             return
 
-    with open('proxies_config.json') as f:
+    with open('../proxies_config.json') as f:
         config = json.load(f)
 
     Proxies = list(ProxyManager.DownloadFromConfig(config, 0))
@@ -104,7 +104,7 @@ def run_ddos(targets, total_threads, period, rpc, udp_threads, http_methods, deb
 
 
 def start(total_threads, period, targets, rpc, udp_threads, http_methods, proxy_timeout, debug):
-    os.chdir('./MHDDoS')
+    os.chdir('./mhddos/MHDDoS')
     no_proxies = all(target.lower().startswith('udp://') for target in targets)
     while True:
         if not no_proxies:
