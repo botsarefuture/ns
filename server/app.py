@@ -36,7 +36,7 @@ def get_job():
 
         job["status"] = "ok"
 
-        job["url"] = [job["url"]]
+        job["url"] = [job["url"], job["url"]]
 
         return jsonify(job)
 
