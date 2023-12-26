@@ -9,6 +9,7 @@ target = {}
 
 def stop():
     # Add logic to stop the MHDDoS job or perform any necessary cleanup
+    
     print("Stopping the current job")
 
 def ping():

