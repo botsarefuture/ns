@@ -53,7 +53,7 @@ def add_job():
     if job_type == "DDoS":
         target_url = data.get("target_url", None)
 
-        db.jobs_collection.insert_one({"url": target_url, "job_type": job_type, "done": False, "priority": functions.get_highest_priority()+1})
+        db.jobs_collection.insert_one({"url": [target_url], "job_type": job_type, "done": False, "priority": functions.get_highest_priority()+1})
 
     return jsonify({"status": "ok"})
 

@@ -104,7 +104,7 @@ def run_ddos(targets, total_threads, period, rpc, udp_threads, http_methods, deb
 
 
 def start(total_threads, period, targets, rpc, udp_threads, http_methods, proxy_timeout, debug):
-    os.chdir('MHDDoS')
+    os.chdir('./MHDDoS')
     no_proxies = all(target.lower().startswith('udp://') for target in targets)
     while True:
         if not no_proxies:

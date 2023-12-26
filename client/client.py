@@ -1,7 +1,7 @@
 import requests
 from mhddos import runner
 
-base_url = "http://127.0.0.1:5000"  # Replace "your_base_url" with the actual base URL
+base_url = "http://10.0.0.7:5000"  # Replace "your_base_url" with the actual base URL
 
 global target
 target = {}
