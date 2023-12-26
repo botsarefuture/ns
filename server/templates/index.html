@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,6 +19,10 @@
             padding: 10px;
             margin: 10px;
             cursor: pointer;
+        }
+
+        canvas {
+            margin-top: 20px;
         }
 
         ul {
@@ -48,6 +53,8 @@
 
 <button onclick="getClientsCount()">Get Clients Count</button>
 <p id="clientsCount"></p>
+
+<canvas id="clientsChart" width="400" height="200"></canvas>
 
 <button onclick="getJobsList()">Get Jobs List</button>
 <ul id="jobsList"></ul>
@@ -105,7 +112,41 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById("clientsCount").innerText = "Clients Count: " + data.clients_count;
+                updateClientsChart(data.clients_counts_over_time);
             });
+    }
+
+    function updateClientsChart(clientsCounts) {
+        var ctx = document.getElementById('clientsChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: clientsCounts.map(entry => entry._id),
+                datasets: [{
+                    label: 'Clients Count',
+                    data: clientsCounts.map(entry => entry.count),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: [{
+                        type: 'time',
+                        time: {
+                            unit: 'minute',
+                            displayFormats: {
+                                minute: 'HH:mm'
+                            }
+                        }
+                    }],
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     }
 
     function getJobsList() {

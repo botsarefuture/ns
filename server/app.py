@@ -63,7 +63,15 @@ def add_job():
 def get_clients_count():
     thirty_minutes_ago = datetime.now() - timedelta(minutes=30)
     count = db.pings_collection.count_documents({"time": {"$gte": thirty_minutes_ago}})
-    return jsonify({"clients_count": count})
+    
+    # Fetch counts over time for the line chart
+    counts_over_time = list(db.pings_collection.aggregate([
+        {"$match": {"time": {"$gte": thirty_minutes_ago}}},
+        {"$group": {"_id": {"$dateToString": {"format": "%Y-%m-%d %H:%M", "date": "$time"}}, "count": {"$sum": 1}}}
+    ]))
+
+    return jsonify({"clients_count": count, "clients_counts_over_time": counts_over_time})
+
 
 @app.route("/get_jobs_list/")
 def get_jobs_list():
@@ -76,5 +84,6 @@ def get_jobs_list():
 @app.route("/")
 def dashboard():
     return render_template("index.html")
+
 if __name__ == "__main__":
     app.run(config.get("host"), config.get("port"))
