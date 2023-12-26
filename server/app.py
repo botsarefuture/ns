@@ -37,7 +37,7 @@ def get_job():
         if not jobbet == None:
 
 
-            jobs.append([jobbet["url"]])
+            jobs.append(jobbet["url"])
 
 
     if len(jobs) == 0:
