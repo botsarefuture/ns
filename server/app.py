@@ -6,7 +6,6 @@ import functions
 import config
 import pytz
 
-import request
 
 config = config.get_config()
 
