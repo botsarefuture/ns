@@ -1,3 +1,13 @@
+palestine_text = """
+\033[91m ____       _           _   _ \033[0m
+\033[91m|  _ \\ __ _| | ___  ___| |_(_)_ __   ___\033[0m
+\033[97m| |_) / _` | |/ _ \\/ __| __| | '_ \\ / _ \\\033[0m
+\033[92m|  __/ (_| | |  __/\\__ \\ |_| | | | |  __/\033[0m
+\033[32m|_|   \\__,_|_|\\___||___/\\__|_|_| |_|\\___|\033[0m
+
+\033[91mF\033[91mR\033[91mE\033[97mE \033[92mP\033[92mA\033[92mL\033[92mE\033[91mS\033[91mT\033[92mA\033[92mI\033[91mN\033[91mE\033[0m
+"""
+
 import requests
 from mhddos import runner
 import time
@@ -39,6 +49,8 @@ class AttackController:
         print("Attack completed!")
 
 # Rest of the code remains unchanged
+
+print(palestine_text)
 
 base_urls = ["http://128.140.126.18:5000"]  # Replace with your actual base URLs
 current_target = None  # Variable to store the current target

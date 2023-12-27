@@ -20,3 +20,9 @@ pings_collection = slaves_db["ping"]
 jobs_db = client["jobs"]
 
 jobs_collection = jobs_db["jobs"]
+
+# CLIENTS
+
+clients_db = client["jobs"]
+
+hi_collection = clients_db["hi"]

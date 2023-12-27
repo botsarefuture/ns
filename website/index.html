@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✊ Free Palestine ✊</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+    <img id="palestine-flag" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Flag_of_Palestine.svg/1200px-Flag_of_Palestine.svg.png" alt="Palestine Flag">
+    <div id="slogan">From the river to the sea, Palestine will be free</div>
+    <div class="heart">❤️</div>
+    <div class="support-text">Supporting Palestine because they deserve to be free!</div><br>
+    <div id="hijack">THIS SITE HAS BEEN HIJACKED WITH LOVE FOR PALESTINE!<br>FREE FREE PALESTINE!</div>
+    <footer>Your comrades from the Palestine Liberation Front</footer>
+    <br>
+</body>
+
+<script>
+    // JavaScript redirect based on browser language
+    const userLang = navigator.language || navigator.userLanguage;
+
+    if (userLang.startsWith("fi")) {
+        window.location.replace("index_fi.html");
+    } else if (userLang.startsWith("sv")) {
+        window.location.replace("index_sv.html");
+    } else if (userLang.startsWith("ar")) {
+        window.location.replace("index_ar.html");
+    } else if (userLang.startsWith("uk")) {
+        // User's language is already Ukrainian, no need to redirect
+    } else {
+        // Redirect to the default language (English) if the user's language is not supported
+        window.location.replace("index.html");
+    }
+</script>
+
+</html>
