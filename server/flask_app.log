@@ -140,3 +140,48 @@ TypeError: Object of type ObjectId is not JSON serializable
 2023-12-27 13:41:17,477 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:41:17] "GET /active_clients/ HTTP/1.1" 200 -
 2023-12-27 13:41:46,062 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:41:46] "GET /active/ HTTP/1.1" 200 -
 2023-12-27 13:41:46,360 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:41:46] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:38,627 [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.30.0.2:5000
+2023-12-27 13:42:38,627 [INFO] - [33mPress CTRL+C to quit[0m
+2023-12-27 13:42:40,752 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:40] "GET /active/ HTTP/1.1" 200 -
+2023-12-27 13:42:41,059 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:41] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:42,877 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:42] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:44,089 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:44] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:44,845 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:44] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:50,485 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:50] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:50,523 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:50] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:50,543 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:50] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:50,552 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:50] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:50,573 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:50] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:50,601 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:50] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:50,619 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:50] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:51,024 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:51] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:51,520 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:51] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:51,528 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:51] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:53,404 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:53] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,529 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,537 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,551 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,574 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,591 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,654 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,663 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,671 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,688 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,697 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,830 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,984 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:56,996 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:56] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:57,136 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:57] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:42:57,148 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:42:57] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:43:01,039 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:43:01] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:43:11,025 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:43:11] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:43:21,078 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:43:21] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:43:31,091 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:43:31] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:43:41,080 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:43:41] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:43:51,059 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:43:51] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:44:01,079 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:44:01] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:44:11,072 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:44:11] "GET /active_clients/ HTTP/1.1" 200 -
+2023-12-27 13:44:31,060 [INFO] - 127.0.0.1 - - [27/Dec/2023 13:44:31] "GET /active_clients/ HTTP/1.1" 200 -
