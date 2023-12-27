@@ -15,7 +15,7 @@ else
     # Add commands for installing Python based on your system (e.g., apt-get, yum, brew, etc.)
     # For example, on Debian/Ubuntu:
     sudo apt-get update -y
-    sudo apt-get install python3 -y
+    sudo apt-get install python3 python-is-python3 -y
 fi
 
 # Check if pip is installed
