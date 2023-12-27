@@ -59,8 +59,8 @@ def update_proxies(period, proxy_timeout, threads, targets):
 
     os.makedirs('files/proxies/', exist_ok=True)
     with open('files/proxies/proxies.txt', "w") as all_wr, \
-         open('files/proxies/socks4.txt', "w") as socks4_wr, \
-         open('files/proxies/socks5.txt', "w") as socks5_wr:
+        open('files/proxies/socks4.txt', "w") as socks4_wr, \
+        open('files/proxies/socks5.txt', "w") as socks5_wr:
         for proxy in CheckedProxies:
             proxy_string = str(proxy) + "\n"
             all_wr.write(proxy_string)

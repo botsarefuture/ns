@@ -11,6 +11,11 @@ config = config.get_config()
 
 app = Flask(__name__)
 
+from flask_socketio import SocketIO
+
+socketio = SocketIO(app)
+
+
 JOB_TYPES = ["DDoS"]
 
 # Configure logging
@@ -134,5 +139,43 @@ def dashboard():
     logging.info(f"Accessed dashboard by IP: {request.remote_addr}")
     return render_template("index.html")
 
+import time
+
+def read_logs():
+    log_file_path = "flask_app.log"
+    while True:
+        with open(log_file_path, 'r') as log_file:
+            logs_content = log_file.read()
+            socketio.emit('update_logs', {'logs': logs_content})
+        time.sleep(1)  # Adjust the interval as needed
+
+
+@app.route("/dashboard/")
+def dashboard1():
+    logging.info(f"Accessed dashboard by IP: {request.remote_addr}")
+    return render_template("dashboard.html")
+
+@socketio.on('connect')
+def handle_connect():
+    socketio.emit('update_logs', {'logs': 'Connected to Flask-SocketIO'})
+
+@app.route("/sent_jobs/")
+def sent_jobs():
+    log_file_path = "flask_app.log"
+    jobs_sent = set()
+
+    with open(log_file_path, 'r') as log_file:
+        for line in log_file:
+            if "Sent jobs list to IP:" in line:
+                ip_address = line.split(":")[-1].strip()
+                jobs_sent.add(ip_address)
+
+    return render_template("sent_jobs.html", jobs_sent=jobs_sent)
+
 if __name__ == "__main__":
-    app.run(config.get("host"), config.get("port"))
+    # Start a separate thread to continuously read and emit logs
+    import threading
+    log_thread = threading.Thread(target=read_logs)
+    log_thread.start()
+
+    socketio.run(app, host=config.get("host"), port=config.get("port"))

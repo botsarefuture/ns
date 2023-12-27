@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Dashboard</title>
+</head>
+<body>
+    <div id="log-container" style="height: 400px; overflow-y: scroll;"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('connect', function() {
+            console.log('Connected to SocketIO');
+        });
+
+        socket.on('update_logs', function(data) {
+            var logContainer = document.getElementById('log-container');
+            logContainer.innerHTML = '<pre>' + data.logs + '</pre>';
+            // Auto-scroll to the bottom
+            logContainer.scrollTop = logContainer.scrollHeight;
+        });
+    </script>
+</body>
+</html>
