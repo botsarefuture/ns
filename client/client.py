@@ -17,6 +17,26 @@ import sys
 import schedule  # Import the schedule library
 
 
+
+import subprocess
+import sys
+
+def self_update():
+    try:
+        # Run "git pull" to update the script
+        subprocess.check_output(["git", "pull"])
+
+        # Run "pip install -r requirements.txt" to update dependencies
+        subprocess.check_output(["pip", "install", "-r", "requirements.txt"])
+
+        # Restart the script within a tmux session
+        subprocess.Popen(["tmux", "new-session", "-d", "python", sys.argv[0]])
+
+        # Exit the current script
+        sys.exit(0)
+    except Exception as e:
+        print(f"Error during self-update: {e}")
+
 class ThreadManager:
     def __init__(self):
         self.threads = []
@@ -146,6 +166,7 @@ def pending():
         schedule.run_pending()
         time.sleep(1)
 
+schedule.every(1).hours.do(self_update)
 
 # Add a loop to run the ping function for each base URL every 5 seconds
 if __name__ == "__main__":

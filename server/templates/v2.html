@@ -8,10 +8,17 @@
 </head>
 <body>
 
+    <label>Show Chart:
+        <input type="checkbox" id="chartSwitch" checked>
+    </label>
+
     <p>Total Active Clients: <span id="totalClients"></span></p>
-    <canvas id="clientsChart" width="400" height="200"></canvas>
+    <canvas id="clientsChart"></canvas>
 
     <script>
+        // Declare the chart variable
+        var myChart = null;
+
         // Function to update the chart with data from the server
         function updateChart() {
             fetch('http://127.0.0.1:5000/active_clients/')
@@ -22,42 +29,68 @@
                     // Display the total number of clients
                     document.getElementById("totalClients").innerText = clients.length;
 
-                    // Prepare data for the chart
-                    var chartLabels = clients.map(client => client.last_hi);
-                    var chartData = clients.map(client => client.his.length);
+                    // Get the switch status
+                    var showChart = document.getElementById("chartSwitch").checked;
 
-                    // Get the canvas element
-                    var ctx = document.getElementById('clientsChart').getContext('2d');
+                    // If the switch is off, clear the chart and canvas
+                    if (!showChart) {
+                        // Destroy the chart if it exists
+                        if (myChart) {
+                            myChart.destroy();
+                            myChart = null;
+                        }
+                    } else {
+                        // Prepare data for the chart
+                        var chartLabels = clients.map(client => client.ip);
+                        var chartData = clients.map(client => client.his.length);
 
-                    // Destroy previous chart instance if it exists
-                    if (window.myChart) {
-                        window.myChart.destroy();
-                    }
+                        // Get the canvas element
+                        var canvas = document.getElementById('clientsChart');
+                        var ctx = canvas.getContext('2d');
 
-                    // Create a new bar chart
-                    window.myChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: chartLabels,
-                            datasets: [{
-                                label: 'Number of Connections',
-                                data: chartData,
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
+                        // Set canvas size based on window size
+                        canvas.width = window.innerWidth * 0.8; // You can adjust the factor as needed
+                        canvas.height = window.innerHeight * 0.6;
+
+                        // Destroy previous chart instance if it exists
+                        if (myChart) {
+                            myChart.destroy();
+                        }
+
+                        // Create a new bar chart
+                        myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: chartLabels,
+                                datasets: [{
+                                    label: 'Number of Connections',
+                                    data: chartData,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }
+
+        // Update every 10 seconds
+        setInterval(updateChart, 10000);
+
+        // Update when the switch is toggled
+        document.getElementById("chartSwitch").addEventListener("change", updateChart);
+
+        // Update chart on window resize
+        window.addEventListener("resize", updateChart);
 
         // Initial update when the page loads
         updateChart();
