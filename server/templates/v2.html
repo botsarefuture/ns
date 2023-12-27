@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Clients Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <p>Total Active Clients: <span id="totalClients"></span></p>
+    <canvas id="clientsChart" width="400" height="200"></canvas>
+
+    <script>
+        // Function to update the chart with data from the server
+        function updateChart() {
+            fetch('http://127.0.0.1:5000/active_clients/')
+                .then(response => response.json())
+                .then(data => {
+                    var clients = data.clients;
+
+                    // Display the total number of clients
+                    document.getElementById("totalClients").innerText = clients.length;
+
+                    // Prepare data for the chart
+                    var chartLabels = clients.map(client => client.last_hi);
+                    var chartData = clients.map(client => client.his.length);
+
+                    // Get the canvas element
+                    var ctx = document.getElementById('clientsChart').getContext('2d');
+
+                    // Destroy previous chart instance if it exists
+                    if (window.myChart) {
+                        window.myChart.destroy();
+                    }
+
+                    // Create a new bar chart
+                    window.myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: chartLabels,
+                            datasets: [{
+                                label: 'Number of Connections',
+                                data: chartData,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Initial update when the page loads
+        updateChart();
+    </script>
+
+</body>
+</html>

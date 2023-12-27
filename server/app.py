@@ -61,6 +61,26 @@ def hi():
 
     return jsonify({"status": "ok"})
 
+@app.route("/active_clients/")
+def active_clients():
+    # Assuming 'last_connection' is the field in your collection representing the last connection date
+    today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    query = {"last_hi": {"$gte": today, "$lt": today + timedelta(days=1)}}
+
+    clients = list(db.hi_collection.find(query))
+    
+    clients_list = []
+
+    for client in clients:
+        client["_id"] = str(client["_id"])
+        clients_list.append(client)
+
+    return jsonify({"status": "ok", "clients": clients})
+
+@app.route("/active/")
+def active():
+    return render_template("v2.html")
+
 @app.route("/get_job/")
 def get_job():
     jobs = get_jobs()
