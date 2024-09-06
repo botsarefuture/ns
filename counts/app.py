@@ -4,6 +4,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import requests
 
+
 class ChartApp:
     def __init__(self, master):
         self.master = master
@@ -29,14 +30,14 @@ class ChartApp:
 
         if clients_counts is not None:
             # Extract x (time) and y (clients count) from clients_counts
-            x = [entry['_id'] for entry in clients_counts]
-            y = [entry['count'] for entry in clients_counts]
+            x = [entry["_id"] for entry in clients_counts]
+            y = [entry["count"] for entry in clients_counts]
 
             # Plot the data
-            ax.plot(x, y, marker='o')
-            ax.set_title('Clients Count Chart')
-            ax.set_xlabel('Time')
-            ax.set_ylabel('Clients Count')
+            ax.plot(x, y, marker="o")
+            ax.set_title("Clients Count Chart")
+            ax.set_xlabel("Time")
+            ax.set_ylabel("Clients Count")
 
         return fig
 
@@ -47,7 +48,7 @@ class ChartApp:
 
         if response.status_code == 200:
             data = response.json()
-            clients_counts = data.get('clients_counts_over_time', [])
+            clients_counts = data.get("clients_counts_over_time", [])
             self.update_chart_canvas(clients_counts)
         else:
             print(f"Failed to fetch data. Status code: {response.status_code}")
@@ -58,12 +59,15 @@ class ChartApp:
     def update_chart_canvas(self, clients_counts):
         # Regenerate the chart with the new data
         self.chart_canvas.get_tk_widget().destroy()
-        self.chart_canvas = FigureCanvasTkAgg(self.create_chart(clients_counts), master=self.master)
+        self.chart_canvas = FigureCanvasTkAgg(
+            self.create_chart(clients_counts), master=self.master
+        )
         self.chart_canvas.get_tk_widget().pack()
 
     def schedule_update(self):
         # Schedule the next update after 5000 milliseconds (5 seconds)
         self.master.after(5000, self.update_chart)
+
 
 if __name__ == "__main__":
     root = tk.Tk()

